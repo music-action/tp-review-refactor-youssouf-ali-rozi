@@ -3,24 +3,24 @@
 // what's wrong within this code ?? trouvez la variable avec un nom vraiment bizarre
 
 export class Game {
-  private _lastSymbol = ' ';
+  private _lastSymbol = " ";
   private _x: Board = new Board();
 
   public Play(symbol: string, x: number, y: number): void {
     //if first move
-    if (this._lastSymbol == ' ') {
+    if (this._lastSymbol == " ") {
       //if player is X
-      if (symbol != 'O') {
-        throw new Error('Invalid first player');
+      if (symbol != "X") {
+        throw new Error("Invalid first player");
       }
     }
     //if not first move but player repeated
     else if (symbol == this._lastSymbol) {
-      throw new Error('Invalid next player');
+      throw new Error("Invalid next player");
     }
     //if not first move but play on an already played tile
-    else if (this._x.TileAt(x, y).Symbol != ' ') {
-      throw new Error('Invalid position');
+    else if (this._x.TileAt(x, y).Symbol != " ") {
+      throw new Error("Invalid position");
     }
 
     // update game state
@@ -31,9 +31,9 @@ export class Game {
   public Winner(): string {
     //if the positions in first row are taken
     if (
-      this._x.TileAt(0, 0)!.Symbol != ' ' &&
-      this._x.TileAt(0, 1)!.Symbol != ' ' &&
-      this._x.TileAt(0, 2)!.Symbol != ' '
+      this._x.TileAt(0, 0)!.Symbol != " " &&
+      this._x.TileAt(0, 1)!.Symbol != " " &&
+      this._x.TileAt(0, 2)!.Symbol != " "
     ) {
       //if first row is full with same symbol
       if (
@@ -46,9 +46,9 @@ export class Game {
 
     //if the positions in first row are taken
     if (
-      this._x.TileAt(1, 0)!.Symbol != ' ' &&
-      this._x.TileAt(1, 1)!.Symbol != ' ' &&
-      this._x.TileAt(1, 2)!.Symbol != ' '
+      this._x.TileAt(1, 0)!.Symbol != " " &&
+      this._x.TileAt(1, 1)!.Symbol != " " &&
+      this._x.TileAt(1, 2)!.Symbol != " "
     ) {
       //if middle row is full with same symbol
       if (
@@ -61,9 +61,9 @@ export class Game {
 
     //if the positions in first row are taken
     if (
-      this._x.TileAt(2, 0)!.Symbol != ' ' &&
-      this._x.TileAt(2, 1)!.Symbol != ' ' &&
-      this._x.TileAt(2, 2)!.Symbol != ' '
+      this._x.TileAt(2, 0)!.Symbol != " " &&
+      this._x.TileAt(2, 1)!.Symbol != " " &&
+      this._x.TileAt(2, 2)!.Symbol != " "
     ) {
       //if middle row is full with same symbol
       if (
@@ -74,7 +74,7 @@ export class Game {
       }
     }
 
-    return ' ';
+    return " ";
   }
 }
 
@@ -90,7 +90,7 @@ class Board {
   constructor() {
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        const tile: Tile = { X: i, Y: j, Symbol: ' ' };
+        const tile: Tile = { X: i, Y: j, Symbol: " " };
         this._plays.push(tile);
       }
     }
