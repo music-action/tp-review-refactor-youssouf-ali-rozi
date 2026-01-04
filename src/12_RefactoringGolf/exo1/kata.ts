@@ -6,73 +6,61 @@ export class Game {
     private _toto: Board = new Board();
 
     public Play(symbol: string, x: number, y: number): void {
-        //if first move
         if (this._lastSymbol == ' ') {
-            //if player is X
-            if (symbol == 'O') {
-                throw new Error('Invalid first player');
-            }
-        }
-        //if not first move but player repeated
-        else if (symbol == this._lastSymbol) {
-            throw new Error('Invalid next player');
-        }
-        //if not first move but play on an already played tile
-        else if (this._toto.TileAt(x, y).Symbol != ' ') {
-            throw new Error('Invalid position');
+            this.validateFirstMove(symbol);
+        } else {
+            this.validatePlayerNotRepeated(symbol);
+            this.validatePositionNotTaken(x, y);
         }
 
-        // update game state
+        this.updateGameState(symbol, x, y);
+    }
+
+    private validateFirstMove(symbol: string): void {
+        if (symbol != 'X') {
+            throw new Error('Invalid first player');
+        }
+    }
+
+    private validatePlayerNotRepeated(symbol: string): void {
+        if (symbol == this._lastSymbol) {
+            throw new Error('Invalid next player');
+        }
+    }
+
+    private validatePositionNotTaken(x: number, y: number): void {
+        if (this._toto.TileAt(x, y).Symbol != ' ') {
+            throw new Error('Invalid position');
+        }
+    }
+
+    private updateGameState(symbol: string, x: number, y: number): void {
         this._lastSymbol = symbol;
         this._toto.AddTileAt(symbol, x, y);
     }
 
     public Winner(): string {
-        //if the positions in first row are taken
-        if (
-            this._toto.TileAt(0, 0)!.Symbol != ' ' &&
-            this._toto.TileAt(0, 1)!.Symbol != ' ' &&
-            this._toto.TileAt(0, 2)!.Symbol != ' '
-        ) {
-            //if first row is full with same symbol
-            if (
-                this._toto.TileAt(0, 0)!.Symbol == this._toto.TileAt(0, 1)!.Symbol &&
-                this._toto.TileAt(0, 2)!.Symbol == this._toto.TileAt(0, 1)!.Symbol
-            ) {
-                return this._toto.TileAt(0, 0)!.Symbol;
+        for (let row = 0; row < 3; row++) {
+            const winner = this.getRowWinner(row);
+            if (winner != ' ') {
+                return winner;
             }
         }
+        return ' ';
+    }
 
-        //if the positions in 2nd row are taken
+    private getRowWinner(row: number): string {
+        const tile0 = this._toto.TileAt(row, 0)!;
+        const tile1 = this._toto.TileAt(row, 1)!;
+        const tile2 = this._toto.TileAt(row, 2)!;
+
         if (
-            this._toto.TileAt(1, 0)!.Symbol != ' ' &&
-            this._toto.TileAt(1, 1)!.Symbol != ' ' &&
-            this._toto.TileAt(1, 2)!.Symbol != ' '
+            tile0.Symbol != ' ' &&
+            tile0.Symbol == tile1.Symbol &&
+            tile1.Symbol == tile2.Symbol
         ) {
-            //if middle row is full with same symbol
-            if (
-                this._toto.TileAt(1, 0)!.Symbol == this._toto.TileAt(1, 1)!.Symbol &&
-                this._toto.TileAt(1, 2)!.Symbol == this._toto.TileAt(1, 1)!.Symbol
-            ) {
-                return this._toto.TileAt(1, 0)!.Symbol;
-            }
+            return tile0.Symbol;
         }
-
-        //if the positions in 2nd row are taken
-        if (
-            this._toto.TileAt(2, 0)!.Symbol != ' ' &&
-            this._toto.TileAt(2, 1)!.Symbol != ' ' &&
-            this._toto.TileAt(2, 2)!.Symbol != ' '
-        ) {
-            //if middle row is full with same symbol
-            if (
-                this._toto.TileAt(2, 0)!.Symbol == this._toto.TileAt(2, 1)!.Symbol &&
-                this._toto.TileAt(2, 2)!.Symbol == this._toto.TileAt(2, 1)!.Symbol
-            ) {
-                return this._toto.TileAt(2, 0)!.Symbol;
-            }
-        }
-
         return ' ';
     }
 }
